@@ -18,8 +18,8 @@ st.set_page_config(layout="wide")
 @st.cache_resource
 
 def load_models():
-    model_classification_path = "C:\\Users\\GIGABYTE\\Desktop\\DL\\classification_model.keras"
-    model_segmentation_path = "C:\\Users\\GIGABYTE\\Desktop\\DL\\segmentation_model.keras"
+    model_classification_path = "classification_model.keras"
+    model_segmentation_path = "segmentation_model.keras"
     model_classification = load_model(model_classification_path)
     model_segmentation = load_model(model_segmentation_path)
     return model_classification, model_segmentation
