@@ -1,6 +1,6 @@
 # Breed-Classifier-and-Image-Segmentation
 
-This project successfully leverages the Oxford-IIIT Pet Dataset to tackle the challenges of breed classification and segmentation. By employing transfer learning techniques, the models achieved state-of-the-art performance in both tasks. The EfficientNetV2-S model excelled in breed classification, delivering outstanding accuracy, while the MobileNetV2 model provided highly accurate segmentation results. This work demonstrates the effectiveness of modern deep learning architectures in handling complex computer vision tasks related to animal images.
+This project successfully leverages the Oxford-IIIT Pet Dataset to tackle the challenges of breed classification and segmentation. By employing transfer learning techniques, the models achieved state-of-the-art performance in both tasks. The Xception model excelled in breed classification, delivering outstanding accuracy, while the MobileNetV2 model provided highly accurate segmentation results. This work demonstrates the effectiveness of modern deep learning architectures in handling complex computer vision tasks related to animal images.
 
 ## Table of Contents
 
@@ -11,8 +11,6 @@ This project successfully leverages the Oxford-IIIT Pet Dataset to tackle the ch
 - [Training](#training)
 - [Evaluation](#evaluation)
 - [Results](#results)
-- [Visualization](#visualization)
-- [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
 
@@ -22,9 +20,12 @@ This project successfully leverages the Oxford-IIIT Pet Dataset to tackle the ch
 In the field of computer vision, accurately classifying and segmenting images is crucial for various applications, ranging from autonomous vehicles to medical imaging. However, these tasks become significantly more challenging when dealing with fine-grained details, such as distinguishing between similar breeds of animals or precisely segmenting objects with complex boundaries. This project addresses these challenges by developing robust models for both breed classification and image segmentation of pet (dogs and cats) images.
 
 ### Key Features
-- **Dual-Task Modeling**: The project tackles both classification and segmentation, offering a comprehensive solution for analyzing pet images.
-- **Transfer Learning**: Leveraging pre-trained models allows for rapid convergence and high accuracy with relatively small datasets.
-- **User-Friendly Interface with Streamlit**: The application features an intuitive Streamlit interface that allows users to upload a picture and instantly receive both classification and segmentation results. This streamlined approach makes it easy for users to interact with the model and obtain detailed insights without needing any technical expertise.
+- **Dual-Task Modeling**  
+  The project tackles both classification and segmentation, offering a comprehensive solution for analyzing pet images.
+- **Transfer Learning**  
+  Leveraging pre-trained models allows for rapid convergence and high accuracy with relatively small datasets.
+- **User-Friendly Interface with Streamlit**  
+  The application features an intuitive Streamlit interface that allows users to upload a picture and instantly receive both classification and segmentation results. This streamlined approach makes it easy for users to interact with the model and obtain detailed insights without needing any technical expertise.
 
 ## Usage
 
@@ -55,30 +56,98 @@ The results are displayed in three main sections:
 
 ## Dataset
 
-Details about the dataset(s) used:
-- Dataset name(s) and source(s)
-- Preprocessing steps
-- Train/Validation/Test split
-- Any custom data augmentation applied
+The dataset used for this project is the Oxford-IIIT Pet Dataset, which is widely utilized for tasks related to pet image classification and segmentation.
+- **Dataset Name:** Oxford-IIIT Pet Dataset
+- **Source:** [Oxford Visual Geometry Group (VGG) Data](http://www.robots.ox.ac.uk/~vgg/data/pets/)
+- **Description:** The Oxford-IIIT Pet Dataset contains images of 37 different pet breeds, each with corresponding segmentation annotations. The dataset includes images of both cats and dogs, providing a diverse set of examples for training and evaluating models.
+
+To obtain the dataset, use the following commands to download and extract the images and annotations:
+
+```bash
+!wget http://www.robots.ox.ac.uk/~vgg/data/pets/data/images.tar.gz
+!wget http://www.robots.ox.ac.uk/~vgg/data/pets/data/annotations.tar.gz
+```
+
+### Train / Validation / Test split
+
+The dataset comprises 7,390 images, each accompanied by a corresponding segmentation annotation. It includes 200 samples for each of the 37 pet breeds, with the exception of two breeds: Staffordshire Bull Terrier (191 samples) and Scottish Terrier (199 samples). The dataset is split into training, validation, and test sets with a ratio of 8:1:1, resulting in 5,912 images for training, 739 for validation, and 739 for testing.
 
 ## Model Architecture
 
-Describe the model architecture(s) used:
-- **Classification Model:**
-  - Layers, activation functions, etc.
-- **Segmentation Model:**
-  - Encoder-decoder structure, U-Net, etc.
+### Classification Model
 
-Include model diagrams or code snippets if relevant.
+The classification model is based on the Xception architecture, which serves as the backbone for feature extraction. The model is designed to classify images into one of 37 different pet breeds. Below is a detailed description of the model's structure:
+
+- **Backbone:** The Xception network is utilized as the backbone for feature extraction. It is pre-trained on the ImageNet dataset and configured with the following settings:
+  - **Weights:** Initialized with pre-trained weights from ImageNet.
+  - **Input Shape:** (384, 384, 3), which corresponds to the image dimensions.
+  - **Top Layers:** Excluded (`include_top=False`) to allow for custom classification layers.
+  - **Trainability:** The backbone is set to non-trainable (`trainable=False`) to leverage the pre-trained features while reducing computational load.
+
+- **Data Augmentation:** To improve model generalization, a sequence of data augmentation layers is applied to the input images:
+  - **Random Flip:** Horizontal flipping of images.
+  - **Random Rotation:** Rotation of images by up to 10%.
+  - **Random Zoom:** Zooming in or out by up to 20%.
+
+- **Custom Layers:**
+  - **Global Average Pooling:** Reduces the spatial dimensions of the feature maps, summarizing them into a single vector.
+  - **Dense Layers:** Three dense layers are used, each followed by batch normalization and ReLU activation:
+    - **First Dense Layer:** 256 units.
+    - **Second Dense Layer:** 512 units.
+    - **Third Dense Layer:** 512 units, followed by a dropout layer with a 30% dropout rate to prevent overfitting.
+  - **Output Layer:** A dense layer with 37 units (corresponding to the number of pet breeds) and a softmax activation function for multi-class classification.
+
+ - **Model Summary:**
+   ![image](https://github.com/user-attachments/assets/dfee8e27-9054-4096-945b-dc03361fbf7a)
+
+### Segmentation Model
+
+The segmentation model is built using a U-Net architecture with a MobileNetV2 backbone. The model is designed to perform pixel-wise segmentation of pet images into three classes: background, pet, and border. Below is a detailed description of the model's structure:
+
+- **Backbone:** The MobileNetV2 architecture is used as the encoder, pre-trained on the ImageNet dataset. It provides a strong feature extraction foundation for the segmentation task:
+  - **Input Shape:** (224, 224, 3), corresponding to the image dimensions.
+  - **Weights:** Pre-trained on ImageNet.
+  - **Top Layers:** Excluded (`include_top=False`) to allow for a custom decoder network.
+
+- **U-Net Architecture:** The decoder part of the U-Net architecture is constructed using the following layers:
+  - **Encoder Output:** The output from the "block_13_expand_relu" layer of MobileNetV2 is used as the input to the decoder.
+  - **Upsampling and Concatenation Layers:**
+    - **First Upsampling (u1):** Upsamples the encoder output by a factor of 2 and concatenates it with the output from the "block_6_expand_relu" layer of MobileNetV2. Followed by a convolutional layer with 128 filters.
+    - **Second Upsampling (u2):** Upsamples the previous output by a factor of 2 and concatenates it with the output from the "block_3_expand_relu" layer of MobileNetV2. Followed by a convolutional layer with 64 filters.
+    - **Third Upsampling (u3):** Upsamples the previous output by a factor of 2 and concatenates it with the output from the "block_1_expand_relu" layer of MobileNetV2. Followed by a convolutional layer with 32 filters.
+    - **Final Upsampling (u4):** Upsamples the previous output by a factor of 2 and passes it through a convolutional layer with 16 filters.
+
+- **Output Layer:** The final output is generated using a 1x1 convolutional layer with `num_classes` (3 in this case) filters, corresponding to the three segmentation classes (background, pet, border). A softmax activation function is applied to produce class probabilities for each pixel.
 
 ## Training
 
-Instructions for training the models:
+### Classification Model
 
-- Details about the training process:
-  - Loss functions, optimizers, learning rate schedules
-  - Hyperparameters and their values
-  - Any transfer learning techniques used
+- **Training Details:**
+  - **Loss Functions:** Categorical Crossentropy, suitable for multi-class classification tasks.
+  - **Optimizers:** RMSprop with default parameters, chosen for its effectiveness in training deep neural networks.
+  - **Compiling Metrics:** Accuracy, used to evaluate the model's performance during training and validation.
+  - **Callbacks:**
+    - **Early Stopping:** Implemented to monitor the validation loss (`val_loss`) and stop training if no improvement is observed for 5 consecutive epochs (`patience=5`). The best weights are restored after stopping.
+    - **Learning Rate Reduction:** The learning rate was reduced by a factor of 0.2 if the validation loss did not improve for 3 consecutive epochs (`patience=3`), with a minimum learning rate set to 0.0001 (`min_lr=0.0001`).
+  - **Hyperparameters:**
+      - **Epochs:** The model was trained for up to 30 epochs (`EPOCHS=30`).
+      - **Batch Size:** A batch size of 32 was used during training.
+  - **Transfer Learning Techniques:** The backbone (Xception) was pre-trained on ImageNet and was set to non-trainable during the initial training phase to leverage its pre-learned features.
+
+### Segmentation Model
+
+- **Training Details:**
+  - **Loss Functions:** Categorical Crossentropy, suitable for multi-class classification tasks.
+  - **Optimizers:** Adam, selected for its adaptability and efficiency in training deep neural networks.
+  - **Compiling Metrics:** Accuracy, used to evaluate the model's performance during training and validation.
+  - **Callbacks:**
+    - **Early Stopping:** Implemented to monitor the validation loss (`val_loss`) and stop training if no improvement is observed for 5 consecutive epochs (`patience=5`). The best weights are restored after stopping.
+    - **Learning Rate Reduction:** The learning rate was reduced by a factor of 0.2 if the validation loss did not improve for 3 consecutive epochs (`patience=3`), with a minimum learning rate set to 0.0001 (`min_lr=0.0001`).
+  - **Hyperparameters:**
+      - **Epochs:** The model was trained for up to 30 epochs (`EPOCHS=30`).
+      - **Batch Size:** A batch size of 16 was used during training.
+  - **Transfer Learning Techniques:** The backbone (MobileNetV2) was pre-trained on ImageNet and was used as the encoder in the U-Net architecture, with the initial weights frozen during the early stages of training.
 
 ## Evaluation
 
