@@ -1,11 +1,5 @@
 # Breed-Classifier-and-Image-Segmentation
 
-The project successfully utilized the Oxford-IIIT Pet Dataset to address the challenges of breed classification and segmentation.
-Transfer learning models excelled in both tasks.
-The EfficientNetV2-S model demonstrated superior performance in classification, while MobileNetV2 provided highly accurate segmentation results.
-
-# Breed-Classifier-and-Image-Segmentation
-
 This project successfully leverages the Oxford-IIIT Pet Dataset to tackle the challenges of breed classification and segmentation. By employing transfer learning techniques, the models achieved state-of-the-art performance in both tasks. The EfficientNetV2-S model excelled in breed classification, delivering outstanding accuracy, while the MobileNetV2 model provided highly accurate segmentation results. This work demonstrates the effectiveness of modern deep learning architectures in handling complex computer vision tasks related to animal images.
 
 ## Table of Contents
@@ -133,4 +127,12 @@ Guidelines for contributing to the project:
 
 ## License
 
-Include licensing information, e.g.:
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contact
+
+Provide your contact information:
+- Welly Huang
+- weichung.huang927@gmail.com
+- [LinkedIn](https://www.linkedin.com/in/weichunghuang0927/)
+- [GitHub](https://github.com/wellyhuang927)
