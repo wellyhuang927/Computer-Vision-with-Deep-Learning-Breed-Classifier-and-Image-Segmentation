@@ -1,6 +1,6 @@
-# Computer Vision w/ Deep Learning - Breed Classifier and Image Segmentation
+# Breed Classifier and Image Segmentation
 
-This project successfully leverages the Oxford-IIIT Pet Dataset to tackle the challenges of breed classification and segmentation. By employing transfer learning techniques, the models achieved state-of-the-art performance in both tasks. The Xception model excelled in breed classification, delivering outstanding accuracy, while the MobileNetV2 model provided highly accurate segmentation results. This work demonstrates the effectiveness of modern deep learning architectures in handling complex computer vision tasks related to animal images.
+This computer vision project successfully leverages deep learning and the Oxford-IIIT Pet Dataset to tackle the challenges of breed classification and segmentation. By employing transfer learning techniques, the models achieved state-of-the-art performance in both tasks. The Xception model excelled in breed classification, delivering outstanding accuracy, while the MobileNetV2 model provided highly accurate segmentation results. This work demonstrates the effectiveness of modern deep learning architectures in handling complex computer vision tasks related to animal images.
 
 ## Table of Contents
 
