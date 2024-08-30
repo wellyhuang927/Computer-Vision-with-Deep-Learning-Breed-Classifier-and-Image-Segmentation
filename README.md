@@ -151,22 +151,111 @@ The segmentation model is built using a U-Net architecture with a MobileNetV2 ba
 
 ## Evaluation
 
-Explain how to evaluate the trained models:
-- **Classification:**
-  - Metrics (accuracy, F1-score, etc.)
-- **Segmentation:**
-  - Metrics (IoU, Dice coefficient, etc.)
+### Classification Model
+
+The classification model was evaluated using four key metrics: accuracy, classification report, confusion matrix, and ROC curve for multiclass analysis.
+
+- **Accuracy**
+  | Split     | Accuracy | Loss    |
+  |-----------|----------|---------|
+  | Training  | 0.9803   | 0.0559  |
+  | Validation| 0.9378   | 0.2461  |
+  | Test      | 0.9256   | 0.2867  |
+
+
+- **Classification Report**
   
-Include example commands and expected outputs.
+  | Class                       | Precision | Recall | F1-Score | Support |
+  |-----------------------------|-----------|--------|----------|---------|
+  | Abyssinian                  | 0.92      | 0.96   | 0.94     | 23      |
+  | Bengal                      | 0.77      | 0.85   | 0.81     | 20      |
+  | Birman                      | 0.71      | 0.83   | 0.77     | 12      |
+  | Bombay                      | 0.93      | 0.82   | 0.87     | 17      |
+  | British_Shorthair           | 0.89      | 0.89   | 0.89     | 19      |
+  | Egyptian_Mau                | 0.90      | 0.82   | 0.86     | 22      |
+  | Maine_Coon                  | 0.78      | 0.93   | 0.85     | 15      |
+  | Persian                     | 0.96      | 0.92   | 0.94     | 24      |
+  | Ragdoll                     | 0.90      | 0.83   | 0.86     | 23      |
+  | Russian_Blue                | 0.88      | 0.84   | 0.86     | 25      |
+  | Siamese                     | 0.92      | 0.92   | 0.92     | 13      |
+  | Sphynx                      | 1.00      | 1.00   | 1.00     | 19      |
+  | American_Bulldog            | 0.93      | 0.96   | 0.95     | 27      |
+  | American_Pit_Bull_Terrier   | 0.78      | 0.72   | 0.75     | 25      |
+  | Basset_Hound                | 0.93      | 0.88   | 0.90     | 16      |
+  | Beagle                      | 0.86      | 1.00   | 0.92     | 18      |
+  | Boxer                       | 0.90      | 0.90   | 0.90     | 21      |
+  | Chihuahua                   | 0.89      | 0.94   | 0.91     | 17      |
+  | English_Cocker_Spaniel      | 1.00      | 0.91   | 0.95     | 23      |
+  | English_Setter              | 0.95      | 1.00   | 0.97     | 19      |
+  | German_Shorthaired          | 1.00      | 1.00   | 1.00     | 18      |
+  | Great_Pyrenees              | 1.00      | 1.00   | 1.00     | 22      |
+  | Havanese                    | 1.00      | 0.94   | 0.97     | 17      |
+  | Japanese_Chin               | 0.96      | 1.00   | 0.98     | 22      |
+  | Keeshond                    | 1.00      | 1.00   | 1.00     | 18      |
+  | Leonberger                  | 1.00      | 1.00   | 1.00     | 22      |
+  | Miniature_Pinscher          | 0.95      | 0.91   | 0.93     | 22      |
+  | Newfoundland                | 0.96      | 1.00   | 0.98     | 23      |
+  | Pomeranian                  | 1.00      | 1.00   | 1.00     | 22      |
+  | Pug                         | 1.00      | 1.00   | 1.00     | 18      |
+  | Saint_Bernard               | 1.00      | 0.89   | 0.94     | 28      |
+  | Samoyed                     | 1.00      | 1.00   | 1.00     | 18      |
+  | Scottish_Terrier            | 1.00      | 1.00   | 1.00     | 19      |
+  | Shiba_Inu                   | 1.00      | 1.00   | 1.00     | 12      |
+  | Staffordshire_Bull_Terrier  | 0.71      | 0.71   | 0.71     | 24      |
+  | Wheaten_Terrier             | 0.92      | 1.00   | 0.96     | 22      |
+  | Yorkshire_Terrier           | 1.00      | 1.00   | 1.00     | 14      |
+  | **Accuracy**                |          |        | **0.93** | **739** |
+  | **Macro Avg**               | **0.93** | **0.93**| **0.93** | **739** |
+  | **Weighted Avg**            | **0.93** | **0.93**| **0.93** | **739** |
+
+- **Confusion Matrix**
+  ![image](https://github.com/user-attachments/assets/aabbf1c0-0aa1-407b-9306-4e2913e3e957)
+
+- **ROC Curve for Multiclass Analysis**
+  ![image](https://github.com/user-attachments/assets/9abb1ca0-81be-491d-93ba-f4443b013767)
+
+### Segmentation Model
+
+Three evaluation metrics were utilized for the segmentation model: pixel accuracy, Intersection over Union (IoU) score, and Dice coefficient.
+
+- **Pixel Accuracy**
+  | Split      | Accuracy | Loss    |
+  |------------|----------|---------|
+  | Training   | 0.9523   | 0.1196  |
+  | Validation | 0.9235   | 0.2484  |
+  | Test       | 0.9206   | 0.2261  |
+
+- **IoU Score**
+  | Metric                     | IoU Score          |
+  |----------------------------|--------------------|
+  | **Overall IoU Score**      | 0.7766             |
+  | **Average per Class**      |                    |
+  | - Pet                      | 0.8483             |
+  | - Background               | 0.9055             |
+  | - Border                   | 0.5759             |
+
+- **Dice Coefficient**
+  | Metric                         | Dice Coefficient  |
+  |--------------------------------|-------------------|
+  | **Overall Dice Coefficient**   | 0.8608            |
+  | **Average per Class**          |                   |
+  | - Pet                          | 0.9125            |
+  | - Background                   | 0.9471            |
+  | - Border                       | 0.7229            |
 
 ## Results
 
-Summarize the results achieved by your models:
-- Performance metrics
-- Comparison with other methods
-- Examples of predictions (images with ground truth and model output)
+### Classification Model
 
-Include tables, charts, and visualizations if applicable.
+![image](https://github.com/user-attachments/assets/de53222a-be20-4915-845f-4623ee8cc686)
+
+Some of the wrong classifications
+
+![image](https://github.com/user-attachments/assets/0fa603e9-a3ba-481f-8151-a5273be65c7d)
+
+### Segmentation Model
+
+![image](https://github.com/user-attachments/assets/724b7e72-5248-4d8b-9ca4-e16e07ee9c6c)
 
 ## License
 
